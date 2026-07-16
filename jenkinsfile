@@ -1,20 +1,23 @@
-pipeline{
-   agent any
+pipeline {
+    agent any
 
-    stages{
-        stage("Build"){
-            steps{
-                echo "Building.."
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git url: 'https://github.com/Srinidhi-052006/Registration.git',
+                    branch: 'main'
             }
         }
-        stage("Test"){
-            steps{
-                echo "Testing.."
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
             }
         }
-        stage("Deploy"){
-            steps{
-                echo "Deploying.."
+
+        stage('Run Application') {
+            steps {
+                sh 'node server.js &'
             }
         }
     }
