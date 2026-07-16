@@ -1,11 +1,16 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs 'NodeJS'
+    }
+
     stages {
-        stage('Clone Repository') {
+
+        stage('Checkout') {
             steps {
-                git url: 'https://github.com/Srinidhi-052006/Registration.git',
-                    branch: 'main'
+                git branch: 'main',
+                url: 'https://github.com/Srinidhi-052006/Registration.git'
             }
         }
 
@@ -15,10 +20,26 @@ pipeline {
             }
         }
 
-        stage('Run Application') {
+        stage('Verify Files') {
             steps {
-                sh 'node server.js &'
+                sh 'ls -l'
             }
+        }
+
+        stage('Run Server') {
+            steps {
+                sh 'nohup node server.js > server.log 2>&1 &'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline executed successfully!'
+        }
+
+        failure {
+            echo 'Pipeline failed.'
         }
     }
 }
